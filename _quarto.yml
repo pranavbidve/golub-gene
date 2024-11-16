@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "Exploratory Data Analysis of the Golub Gene Expression Dataset"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Naman Bareja (nb3236)
+    - Pranav Bidve (pb2972)
+  repo-url: https://github.com/pranavbidve/golub-gene
   date: today
   page-footer:
     right: |
