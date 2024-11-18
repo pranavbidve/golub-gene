@@ -25,7 +25,8 @@ book:
 
 format:
   html:
-    theme: cosmo
+    theme: vapor
+    css: custom.css
     code-fold: true
 
 

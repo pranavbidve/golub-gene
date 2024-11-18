@@ -1,0 +1,23 @@
+/* Style for stdout (normal output) */
+div.cell-output.cell-output-stdout pre {
+    color: #ffffff !important; /* White text */
+    background-color: #2c1a4d !important; /* Purple background */
+    padding: 10px;
+    border-radius: 5px;
+    overflow: auto; /* Handle long lines gracefully */
+}
+
+/* Style for stderr (error/warning output) */
+div.cell-output.cell-output-stderr pre {
+    color: #ffffff !important; /* White text */
+    background-color: #2c1a4d !important; /* Purple background (same as stdout) */
+    padding: 10px;
+    border-radius: 5px;
+    overflow: auto;
+}
+
+/* Style for inline <code> tags in both */
+div.cell-output.cell-output-stdout pre code,
+div.cell-output.cell-output-stderr pre code {
+    color: #ffffff !important; /* Ensure inline code text is also white */
+}

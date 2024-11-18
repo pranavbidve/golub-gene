@@ -1,1 +1,38 @@
-# Introduction
+---
+title: "Introduction"
+author: 
+  - Naman Bareja
+  - Pranav Bidve
+
+output: html_document
+---
+
+The advent of high-throughput sequencing technologies and DNA microarray profiling has revolutionized the field of bioinformatics, providing unprecedented insights into genetic variations associated with diseases. One such disease where genomics plays a crucial role in diagnosis is leukemia, a cancer of the blood and bone marrow. Leukemia is categorized into various subtypes, with Acute Myeloid Leukemia (AML) and Acute Lymphoblastic Leukemia (ALL) being two of the most common and clinically significant types. Differentiating between these subtypes is vital for treatment decisions and patient outcomes. Traditional diagnostic methods have relied heavily on clinical parameters and cytological findings. However, with the availability of gene expression data, a more precise and personalized approach can be developed.
+
+This project centers around the **Golub Gene Expression Dataset**, a well-known collection of gene expression data that was initially used in a study by Golub et al. in 1999. The dataset contains gene expression measurements from DNA microarray experiments conducted on 72 patients, each classified as either suffering from AML or ALL. The dataset includes over 7,000 genes, each representing a potential marker for cancer type identification. Our primary goal is to explore this dataset through various data science techniques to understand which genes are most predictive of leukemia subtype and to determine whether these gene expression profiles can be effectively used for classification tasks.
+
+We chose this topic because it presents a perfect opportunity to bridge the gap between machine learning techniques and real-world biological data. Understanding the relationship between gene expression and disease classification is an exciting and meaningful application of data science. It also provides an opportunity to apply sophisticated data analysis techniques, such as exploratory data analysis (EDA), dimensionality reduction, clustering, and classification, which are essential skills in modern data science.
+
+Our research questions focus on understanding how gene expression data can be analyzed and visualized to draw meaningful biological inferences. Specifically, we aim to explore:
+
+1. **Gene Identification**: Which genes are most significantly associated with the classification of AML and ALL? How can we identify these genes from the dataset?
+
+2. **Dimensionality Reduction**: The Golub dataset contains more than 7,000 genes, leading to a high-dimensional feature space. How can we use dimensionality reduction techniques, such as Principal Component Analysis (PCA), to reduce the complexity of the data while preserving as much variance as possible? Can PCA reveal patterns or structures that differentiate between AML and ALL?
+
+3. **Clustering**: Is there an inherent structure in the data that can be uncovered through unsupervised learning? How well do clustering techniques like K-Means perform in grouping the samples into distinct clusters corresponding to the two leukemia types? What insights can we draw from the clustering results?
+
+4. **Classification**: Can we develop a robust classification model to predict the leukemia subtype of a patient based on their gene expression profile? How well do techniques like logistic regression perform in identifying the most relevant genes for distinguishing between AML and ALL?
+
+The project is also designed to address several technical challenges inherent in working with high-dimensional biological data. One such challenge is the inherent imbalance in the dataset—AML and ALL samples are not perfectly balanced, which can affect model performance. Additionally, gene expression data is often noisy and requires careful preprocessing to ensure that the data is ready for analysis. We aim to demonstrate the application of various methods to handle these issues, such as data normalization, feature selection, and cross-validation.
+
+The methodology of this project involves several stages, beginning with thorough **exploratory data analysis (EDA)**. EDA will include univariate and multivariate statistical analysis, data visualization through histograms, boxplots, and scatter plots, and the identification of missing or anomalous data points. After understanding the general structure of the dataset, we will apply **dimensionality reduction** techniques, such as PCA, to reduce the number of features and visualize the data in lower dimensions. This will help us understand how the data clusters and whether we can clearly distinguish between AML and ALL using a reduced set of features.
+
+Next, we will apply **unsupervised learning techniques**, particularly K-Means clustering, to check if the data naturally divides into two clusters that correspond to the two types of leukemia. This unsupervised analysis will provide insights into how well-separated the AML and ALL classes are based on gene expression and whether clustering methods can perform well on this dataset.
+
+Finally, we will apply **supervised learning methods** such as logistic regression to classify the leukemia subtypes based on the gene expression data. We will also explore feature importance to identify the most significant genes in the classification process. Given the challenge of imbalanced datasets, we will consider various approaches, including data resampling techniques (e.g., random oversampling and undersampling), to improve model performance.
+
+Throughout the project, we will provide extensive **visualizations** to help interpret the results and communicate our findings effectively. Gene expression data is complex and multi-dimensional, so clear, concise visualizations are essential to uncover meaningful patterns. We will include various types of plots, such as PCA plots, heatmaps, dendrograms, and confusion matrices, to help visualize the relationships between different genes, the separation of the leukemia subtypes, and the effectiveness of our classification models.
+
+Our aim is not only to gain biological insights into the classification of leukemia subtypes but also to showcase the power of modern data science techniques in the analysis of genomic data. This project allows us to apply data science principles such as dimensionality reduction, clustering, and classification, while also contributing to a better understanding of how machine learning can be applied to solve problems in the field of bioinformatics.
+
+In addition to answering the research questions posed, this project will serve as a valuable exercise in applying a comprehensive range of data science techniques to a real-world biomedical problem. As a team, we are eager to contribute to this exciting intersection of biology and data science and demonstrate how computational methods can enhance our understanding of complex diseases like leukemia.
