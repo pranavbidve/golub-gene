@@ -65,6 +65,17 @@ if(length(missing_columns) > 0) {
 }
 ```
 
+### Heatmap of missing values
+```{r}
+library(VIM)
+
+# Visualize missing data pattern
+matrixplot(golub_data, main = "Missing Data Pattern")
+
+```
+
+This heatmap does not provide much information due to many columns.
+
 ### Handling Missing Data
 Since the Gender column has only 23 missing values out of a total of 72 observations, this represents a small fraction of the dataset (about 32% of the total observations). There are a few possible approaches to handle this:
 
