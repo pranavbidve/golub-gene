@@ -35,7 +35,6 @@ For this project, we are using the **Golub leukemia dataset**, which is a popula
 - **Importing the Data**: The dataset is available in CSV format, which can be easily loaded into R or Python. Here’s an example of how to load it in R:
 
 ```{r}
-# R code to load the dataset
 library(readr)
 library(ggplot2)
 library(cyberpunk)
@@ -58,10 +57,8 @@ missing_summary <- colSums(is.na(golub_data))
 # Find columns that have missing values
 missing_columns <- missing_summary[missing_summary > 0]
 
-# Print the number of columns with missing values
 cat("Number of columns with missing values: ", length(missing_columns), "\n")
 
-# If there are missing values, print the details
 if(length(missing_columns) > 0) {
   cat("\nColumns with missing values:\n")
   print(missing_columns)
@@ -79,10 +76,8 @@ To inspect the missing values specifically in the Gender column of the golub_dat
 
 The bar chart below shows two categories: "Missing" and "Not Missing". This visualization provides an overview of how much data is missing in the Gender column and how it relates to the total number of observations.
 ```{r}
-# Extract the Gender column (assuming 'golub_data' is your dataset)
+# Extract the Gender column, and missing values in the column
 gender_data <- golub_data$Gender
-
-# Check for missing values in the Gender column
 missing_gender <- is.na(gender_data)
 
 # Create a summary of missing values
@@ -115,7 +110,7 @@ first_gene_colname <- colnames(golub_data)[7]
 
 # Plot using the extracted column name
 ggplot(golub_data, aes(x = Gender, y = .data[[first_gene_colname]])) +
-  geom_jitter(width = 0.1, height = 0) +  # Add jitter to avoid overlapping points
+  geom_point()+
   theme_cpunk() +
   labs(title = paste("Scatter Plot of", first_gene_colname, "by Gender"), 
        x = "Gender", y = paste("Expression of", first_gene_colname))
