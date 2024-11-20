@@ -121,7 +121,7 @@ first_gene_colname <- colnames(golub_data)[7]
 
 # Plot using the extracted column name
 ggplot(golub_data, aes(x = Gender, y = .data[[first_gene_colname]])) +
-  geom_point()+
+  geom_jitter(width = 0.1, height = 0) + # added jitter to avoid overlapping
   theme_cpunk() +
   labs(title = paste("Scatter Plot of", first_gene_colname, "by Gender"), 
        x = "Gender", y = paste("Expression of", first_gene_colname))
