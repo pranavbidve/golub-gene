@@ -1,8 +1,8 @@
 ---
 title: "Introduction"
 author: 
-  - Naman Bareja
-  - Pranav Bidve
+  - Naman Bareja (nb3236)
+  - Pranav Bidve (pb2972)
 
 output: html_document
 ---
