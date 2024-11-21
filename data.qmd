@@ -116,7 +116,7 @@ To understand how the expression levels of the first gene vary across different 
 
  - Plot Description: The scatter plot helps us visualize the spread of the gene expression levels for the first gene across the different gender groups. This plot provides an initial understanding of whether gender might influence the expression level of this gene, as well as showing any potential outliers or trends.
 
-```{r}
+```{r fig.width = 8}
 first_gene_colname <- colnames(golub_data)[7]
 
 # Plot using the extracted column name
