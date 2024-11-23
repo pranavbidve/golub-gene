@@ -15,10 +15,8 @@ In this phase, we focus on:
 - Identifying missing or anomalous data points.
 
 ## Proposed Steps
-1. **Dimensionality Reduction**: Use Principal Component Analysis (PCA) to reduce the feature space and identify patterns.
-2. **Clustering**: Apply K-Means clustering to group samples and compare with true leukemia subtypes.
-3. **Classification**: Build models (e.g., logistic regression) to predict leukemia subtypes and assess feature importance.
-4. **Addressing Challenges**: Handle class imbalance, noisy data, and perform feature selection.
+1. **Dimensionality Reduction**: Identifying the top 50 genes based on correlation with the cancer variable. Comparing these to top genes given by logistic regression.
+2. **Clustering**: Apply clustering to group samples and compare with true leukemia subtypes.
 
 ## Tools & Technologies
 - **R** (for analysis and visualization)
