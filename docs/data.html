@@ -159,7 +159,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./results.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -260,7 +260,7 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>golub_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"golub.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>golub_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/golub.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 72 Columns: 7135</code></pre>
@@ -430,7 +430,105 @@ Attaching package: 'VIM'</code></pre>
 <section id="observations" class="level4" data-number="2.2.4.2">
 <h4 data-number="2.2.4.2" class="anchored" data-anchor-id="observations"><span class="header-section-number">2.2.4.2</span> Observations:</h4>
 <p>The scatter plot does not show any significant trend in the distribution of the gender variable. The data points for males, females, and missing values overlap substantially, suggesting that gender does not have a meaningful effect on the expression of the first gene.</p>
-<p>Given the lack of any distinct pattern in the scatter plot, we can conclude that the gender column does not provide valuable information in this context and can be ignored for further analyses.</p>
+</section>
+</section>
+<section id="understanding-the-distribution-of-missing-data-w.r.t-to-the-cancer-condition" class="level3" data-number="2.2.5">
+<h3 data-number="2.2.5" class="anchored" data-anchor-id="understanding-the-distribution-of-missing-data-w.r.t-to-the-cancer-condition"><span class="header-section-number">2.2.5</span> Understanding the distribution of missing data w.r.t to the cancer condition</h3>
+<p>The gender column in our dataset contains missing values. To investigate whether these missing values are associated with the cancer variable, we performed the following steps:</p>
+<ul>
+<li>Summary of Missingness: We created an indicator variable to identify rows where the gender column is missing. We calculated the proportion of missing values for each category of cancer.</li>
+<li>Visualization: A bar plot was generated to visualize the proportion of missing values in the gender column across different cancer categories.</li>
+<li>Statistical Test: A Chi-Square test of independence was used to determine whether the missingness in the gender column is significantly associated with the cancer variable.<br>
+</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>golub_data<span class="sc">$</span>gender_missing <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(golub_data<span class="sc">$</span>Gender), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>missing_summary <span class="ot">&lt;-</span> golub_data <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cancer) <span class="sc">|&gt;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_count =</span> <span class="fu">sum</span>(gender_missing),</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_count =</span> <span class="fu">n</span>(),</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_proportion =</span> missing_count <span class="sc">/</span> total_count</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(missing_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 4
+  cancer missing_count total_count missing_proportion
+  &lt;chr&gt;          &lt;dbl&gt;       &lt;int&gt;              &lt;dbl&gt;
+1 allB               6          38              0.158
+2 allT               0           9              0    
+3 aml               17          25              0.68 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(missing_summary, <span class="fu">aes</span>(<span class="at">x =</span> cancer, <span class="at">y =</span> missing_proportion)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_cpunk</span>(<span class="at">title.size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Proportion of Missing Gender Values by Cancer Category"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Cancer Category"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Proportion of Missing Values"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>golub_data<span class="sc">$</span>cancer <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(golub_data<span class="sc">$</span>cancer)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>golub_data<span class="sc">$</span>gender_missing <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(golub_data<span class="sc">$</span>gender_missing)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>chi_sq_test <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(<span class="fu">table</span>(golub_data<span class="sc">$</span>cancer, golub_data<span class="sc">$</span>gender_missing))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(table(golub_data$cancer, golub_data$gender_missing)):
+Chi-squared approximation may be incorrect</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(chi_sq_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  table(golub_data$cancer, golub_data$gender_missing)
+X-squared = 23.736, df = 2, p-value = 7.012e-06</code></pre>
+</div>
+</div>
+<section id="results" class="level4" data-number="2.2.5.1">
+<h4 data-number="2.2.5.1" class="anchored" data-anchor-id="results"><span class="header-section-number">2.2.5.1</span> Results</h4>
+<p>The proportions of missing values varied across different cancer categories. The Chi-Square test yielded a p-value of 7.012e-06, indicating a statistically significant association between the missingness in the gender column and the cancer variable. This suggests that the pattern of missing data in gender is not random but influenced by the type of cancer the patient has.</p>
+<p>We update the data so that the missing values are treated as a third level.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace missing values in the gender column with "Unknown"</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>golub_data<span class="sc">$</span>Gender <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(golub_data<span class="sc">$</span>Gender), <span class="st">"Unknown"</span>, golub_data<span class="sc">$</span>Gender)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the gender column to a factor to ensure consistency</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>golub_data<span class="sc">$</span>Gender <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(golub_data<span class="sc">$</span>Gender)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify the updated column</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(golub_data<span class="sc">$</span>Gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+      F       M Unknown 
+     23      26      23 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(golub_data, <span class="at">file =</span> <span class="st">"data/golub2.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 
 
 </section>
@@ -865,8 +963,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./results.html" class="pagination-link" aria-label="Results">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./results.html" class="pagination-link" aria-label="Analysis">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Analysis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

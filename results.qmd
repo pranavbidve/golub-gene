@@ -1,1 +1,139 @@
-# Results
+---
+title: "Analysis"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+---
+## Selection of the 50 Most Important Genes Based on Correlation with Cancer Variable
+
+In this section, we will begin by selecting the 50 most important genes based on their correlation with the cancer variable, which indicates the condition the patient is suffering from. This selection is made for the purpose of better understanding the dataset, as we have a large number of genes (~7000 genes), and we want to focus on the most relevant ones at this stage.
+
+We will calculate the correlation between each gene's expression values and the cancer condition, then select the top 50 genes with the highest correlations. This will allow us to narrow down the dataset for further exploration while ensuring we capture the most significant gene-cancer relationships.
+
+### Data Preparation
+
+First, let's load the necessary libraries and inspect the structure of the dataset.
+
+```{r data_loading}
+golub_data <- read.csv("data/golub2.csv")
+library(dplyr)
+library(tidyr)
+```
+### Extracting Gene Expression and Cancer Condition
+
+The cancer condition is in the sixth column of the dataset, and the gene expression data starts from the 7th column onward. We will separate the cancer variable from the gene expression data for further analysis.
+```{r}
+# Extract the cancer condition (assuming it's in the first column)
+cancer_condition <- golub_data[, 6]
+
+# Extract the gene expression data (starting from the 7th column onward)
+gene_expression <- golub_data[, 7:ncol(golub_data)]
+
+# Check the dimensions of the extracted data
+dim(gene_expression)
+
+```
+### Correlation with Cancer Condition
+
+Now, we will calculate the correlation between each gene's expression and the cancer condition. To do this, we will assume that the cancer variable is numeric (if it's categorical, we may need to encode it before correlation). We will compute the Pearson correlation coefficient between each gene and the cancer variable.
+```{r}
+# Encode cancer_condition as numeric
+cancer_condition_numeric <- as.numeric(as.factor(cancer_condition))
+
+# Calculate Pearson correlations between each gene and the numeric cancer condition
+correlations <- apply(gene_expression, 2, function(x) cor(x, cancer_condition_numeric, method = "pearson"))
+
+# Create a data frame with gene names and their corresponding correlation values
+correlation_df <- data.frame(Gene = colnames(gene_expression), Correlation = correlations)
+
+# Sort the genes by correlation (in descending order) and select the top 50
+top_50_genes <- correlation_df %>%
+  arrange(desc(abs(Correlation))) %>%
+  head(50)
+
+# Display the top 50 genes with the highest correlations
+top_50_genes
+
+```
+### Visualizing the Top 50 Genes
+To better understand the relationships between the top 50 genes and the cancer condition, we can create a bar plot to visualize the correlations. This plot will help us quickly identify the genes with the strongest relationships with the cancer condition.
+
+```{r}
+library(ggplot2)
+library(cyberpunk)
+
+# Bar plot of the top 50 genes based on their correlation with the cancer condition
+ggplot(top_50_genes, aes(x = reorder(Gene, Correlation), y = Correlation)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  coord_flip() +  # Flip the axes for better readability
+  labs(title = "Top 50 Genes Correlated with Cancer Condition",
+       x = "Gene",
+       y = "Correlation with Cancer Condition") +
+  theme_cpunk() +
+  theme(axis.text.y = element_text(size = 7))  # Adjust the size of y-axis labels
+```
+
+### Heatmap of Gene Expression for Top 50 Genes
+To observe patterns in gene expression, we create a heatmap of the expression levels for the top 50 genes across patients.
+
+```{r}
+# Subset the dataset to include only the top 50 genes
+top_50_gene_data <- gene_expression[, top_50_genes$Gene]
+
+# Create a heatmap
+library(pheatmap)
+
+pheatmap(top_50_gene_data,
+         scale = "row", # Standardize genes for better comparison
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         main = "Heatmap of Top 50 Gene Expression",
+         show_rownames = FALSE,
+         show_colnames = FALSE,
+         color = colorRampPalette(c("#000000", "#E200F7", "#00FFFF", "#FFFFFF"))(100)) 
+```
+
+### Correlation Matrix for Top 50 Genes
+Next, we compute and visualize a correlation matrix among the top 50 genes to identify any strong relationships between them.
+
+```{r}
+# Compute correlation matrix
+gene_corr_matrix <- cor(top_50_gene_data)
+
+pheatmap(
+  gene_corr_matrix,
+         main = "Correlation Matrix of Top 50 Genes",
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         color = colorRampPalette(c("#000000", "#E200F7", "#00FFFF", "#FFFFFF"))(100))
+```
+
+### Gene Expression Boxplots by Cancer Condition
+Finally, we examine how the expression levels of selected highly correlated genes vary across cancer conditions.
+
+```{r fig.width = 10}
+# Select a few genes with the highest correlations
+selected_genes <- head(top_50_genes$Gene, 3)
+
+# Convert cancer condition back to a factor for plotting
+cancer_condition_factor <- as.factor(cancer_condition)
+
+# Plot boxplots for the selected genes
+gene_boxplots <- lapply(selected_genes, function(gene) {
+  ggplot(data = data.frame(Expression = gene_expression[[gene]], 
+                           Cancer = cancer_condition_factor), 
+         aes(x = Cancer, y = Expression, fill = Cancer)) +
+    geom_boxplot() +
+    theme_cpunk() +
+    labs(title = paste("Gene Expression of", gene, "by Cancer Condition"),
+         x = "Cancer Condition",
+         y = "Expression Level") +
+    theme(legend.position = "none")
+})
+
+print(gene_boxplots[[1]])
+print(gene_boxplots[[2]])
+print(gene_boxplots[[3]])
+```
+
