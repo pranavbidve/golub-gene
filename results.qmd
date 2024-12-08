@@ -29,13 +29,10 @@ The cancer condition is in the sixth column of the dataset, and the gene express
 cancer_condition <- golub_data[, 6]
 
 gene_expression <- golub_data[, 7:ncol(golub_data)]
-
-dim(gene_expression)
-
 ```
 ### Correlation with Cancer Condition
 
-Now, we will calculate the correlation between each gene's expression and the cancer condition. To do this, we will assume that the cancer variable is numeric (if it's categorical, we may need to encode it before correlation). We will compute the Pearson correlation coefficient between each gene and the cancer variable.
+Now, we will calculate the correlation between each gene's expression and the cancer condition. To do this, we will assume that the cancer variable is numeric (if it's categorical, we may need to encode it before correlation). We will compute the Pearson correlation coefficient between each gene and the cancer variable. Below are the correlations for the top 50 genes.
 ```{r top_50_genes_calculation}
 cancer_condition_numeric <- as.numeric(as.factor(cancer_condition))
 
@@ -54,7 +51,7 @@ Visualizing the correlations
 ```{r}
 ggplot(correlation_df, aes(x = Correlation)) +
   geom_histogram(bins = 30) +
-  labs(title = "Distribution of Correlations with Cancer Condition",
+  labs(title = "Distribution of Correlations",
        x = "Correlation Coefficient",
        y = "Frequency") +
   theme_cpunk(title.size = 13)
@@ -75,25 +72,11 @@ ggplot(top_50_genes, aes(x = reorder(Gene, Correlation), y = Correlation)) +
   theme(axis.text.y = element_text(size = 7))
 ```
 
-### Heatmap of Gene Expression for Top 50 Genes
-To observe patterns in gene expression, we create a heatmap of the expression levels for the top 50 genes across patients.
-
-```{r genes_heatmap}
+```{r}
 top_50_gene_data <- gene_expression[, top_50_genes$Gene]
 top_50_gene_names <- top_50_genes$Gene
 top_50_genes_subset <- golub_data[, c(1:6, which(colnames(golub_data) %in% top_50_gene_names))]
 write.csv(top_50_genes_subset, file = "data/top_50.csv", row.names = FALSE)
-
-library(pheatmap)
-
-pheatmap(top_50_gene_data,
-         scale = "row",
-         cluster_rows = TRUE,
-         cluster_cols = TRUE,
-         main = "Heatmap of Top 50 Gene Expression",
-         show_rownames = FALSE,
-         show_colnames = FALSE,
-         color = colorRampPalette(c("#000000", "#E200F7", "#00FFFF", "#FFFFFF"))(100)) 
 ```
 
 ### Correlation Matrix for Top 50 Genes
@@ -127,6 +110,8 @@ ggpairs(top_50_gene_data[, 1:5],
   theme(strip.text = element_text(size = 7))
 ```
 
+From this scatterplot matrix, you can conclude that several pairs of genes have moderate to strong correlations, such as "X95735_at" and "X08612_at". The density distributions indicate that the expression levels of these genes vary significantly across samples. The scatterplot matrix helps in identifying potentially related genes that might be involved in similar biological processes or conditions.
+
 ### Gene Expression Boxplots by Cancer Condition
 Finally, we examine how the expression levels of selected highly correlated genes vary across cancer conditions.
 
@@ -151,9 +136,9 @@ print(gene_boxplots[[1]])
 print(gene_boxplots[[2]])
 print(gene_boxplots[[3]])
 ```
-## Clustering to visualise te=he variation in the dataset
+## Clustering to visualise the variation in the dataset
+We apply DBSCAN and Heirarchical Clustering. The idea is to treat gene expression levels as features for clustering, and then explore how samples (patients) group together based on their expression profiles.
 ### DBSCAN
-Below is the R code that demonstrates how to apply DBSCAN clustering. The idea is to treat gene expression levels as features for clustering, and then explore how samples (patients) group together based on their expression profiles.
 
 ```{r DBSCAN}
 golub <- read.csv("data/golub2.csv")
@@ -187,8 +172,6 @@ ggplot(golub, aes(x = PC1, y = PC2, color = cluster)) +
        x = "Principal Component 1", 
        y = "Principal Component 2") +
   theme_cpunk()
-
-table(dbscan_result$cluster)
 ```
 ```{r}
 explained_variance <- data.frame(PC = 1:length(pca_result$sdev), 
@@ -289,6 +272,10 @@ plot(
 )
 
 ```
+
+- **Cluster Quality**: Cluster 2 is problematic, with an extremely low average silhouette width of 0.007, indicating that most of the data points in this cluster are poorly assigned.
+
+- **Overall Clustering**: The low average silhouette width of 0.13 suggests that the clustering does not provide a very clear separation between clusters. Further tuning of the clustering process (e.g., adjusting the number of clusters, clustering method, or parameters) could potentially improve the clustering quality.
 
 ##### Challenges:
 - Ineffective Grouping: Even after specifying the number of clusters (e.g., 2 or 3), the resulting groups didn’t clearly separate the data. The clusters that were formed were not distinct, and they didn’t align with the actual cancer types.
