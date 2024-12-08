@@ -21,10 +21,3 @@ In this phase, we focus on:
 ## Tools & Technologies
 - **R** (for analysis and visualization)
 - **tidyverse**, **dplyr**, **ggplot2** (for data manipulation, modeling, and visualization)
-
-### Additional packages for Pranav to install
-```
-install.packages("pROC")
-install.packages("caret")
-install.packages("nnet")
-```
