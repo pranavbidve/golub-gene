@@ -1,7 +1,7 @@
-# Leukemia Subtype Classification Using Gene Expression Data
+# Leukemia Subtype Data Exploration
 
 ## Overview
-This project aims to classify leukemia subtypes (AML and ALL) using the Golub Gene Expression Dataset. We will explore various data science techniques to identify significant genes, reduce dimensionality, and develop predictive models. The project integrates bioinformatics with machine learning to improve understanding and diagnosis of leukemia.
+This project aims to explore the Golub Gene Expression Dataset. We will explore various EDA techniques to identify significant genes, reduce dimensionality, and derive insights. The project integrates bioinformatics with data science to improve understanding and diagnosis of leukemia.
 
 ## Dataset
 The Golub Gene Expression Dataset consists of:
