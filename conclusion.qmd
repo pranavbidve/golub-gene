@@ -1,1 +1,11 @@
 # Conclusion
+
+This projects has aimed to explore the Golub Gene Expression Dataset for cancer types and identify the important features of the dataset and also potentially address any issues with the data. The project was carried out in steps where we started off with understanding the data and identifying (and potentially handling any missing data). The dataset we used has missing values only for 'Gender' column. Because there are a lot of columns (aka Genes), we manually insected the distribution of the 'gender' columns across a few Genes and came to the conclusion that Gender is not showing any pattern. Pearson's Chi-squared test, however, showed that the missingness was infact statistically significant with the Cancer variable and hence we attributed missing to 'Unknown' value instead of imputing / dropping the rows.
+
+Our analysis then aimed at concentrating on a shorter sample of the data. We selected the top 50 genes with the highest correlation with the cancer variable.
+
+The PCA applied was used to identify the distribution of variance across the principal components. The data is very complex and multidimensional and hence we need about 27 Principal Components to explain 75% of the variance.
+
+We then go on to do clustering however, due to high variance in the data, it was not fruitful. Out of two clustering techniques applied, DBSCAN failed to created more than one cluster. Hierarchical Clustering when asked to create 3 clusters, did so with many mis-clustered samples.
+
+We finally created an interactive d3 plot to help scientists look at how differen genes play with each other and/or with Gender and Cancer variables.

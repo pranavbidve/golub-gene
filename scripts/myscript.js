@@ -85,7 +85,7 @@ function updatePlot(data) {
       .y((_, i) => dimensions[features[i]](+d[features[i]]))(features))
     .attr("stroke", d => colorByGender ? colorScale(d.Gender) : "steelblue")
     .transition() // Add animation
-    .duration(1000)
+    .duration(2000)
     .attrTween("stroke-dasharray", function() {
       const length = this.getTotalLength();
       return d3.interpolateString(`0,${length}`, `${length},${length}`);
@@ -98,7 +98,7 @@ function updatePlot(data) {
       .attr("transform", `translate(${x(feature)},0)`)
       .call(axis)
       .append("text")
-      .attr("fill", "black")
+      .attr("fill", "white")
       .attr("font-weight", "bold")
       .attr("y", -10)
       .attr("x", 0)

@@ -136,6 +136,96 @@ print(gene_boxplots[[1]])
 print(gene_boxplots[[2]])
 print(gene_boxplots[[3]])
 ```
+
+## Deep dive into the dataset with PCA
+```{r}
+golub <- read.csv("data/golub2.csv")
+
+# Encode the cancer column
+golub$cancer <- as.factor(golub$cancer)
+golub$cancer_condition_numeric <- as.numeric(golub$cancer)
+
+# Select only numeric columns, including the encoded cancer_condition_numeric
+numeric_data <- golub[, sapply(golub, is.numeric)]
+
+# Load necessary libraries
+library(plotly)
+
+# Perform PCA
+pca_result <- prcomp(numeric_data, scale. = TRUE)
+
+# Calculate the proportion of variance explained by each PC
+variance_explained <- summary(pca_result)$importance[2, ]
+
+# Calculate the cumulative variance explained
+cumulative_variance <- cumsum(variance_explained)
+
+# Create a data frame for plotting
+pca_df <- data.frame(
+  PC = 1:length(variance_explained),
+  Variance_Explained = variance_explained,
+  Cumulative_Variance = cumulative_variance
+)
+
+# Create the plot using plotly with custom styling
+pca_plot <- plot_ly(
+  pca_df,
+  x = ~PC,
+  y = ~Cumulative_Variance,
+  type = 'scatter',
+  mode = 'lines+markers',
+  name = 'Cumulative Variance Explained',
+  line = list(color = '#E200F7')  # Set graph color to #E200F7
+) %>%
+  layout(
+    title = 'Cumulative Variance Explained by Principal Components',
+    xaxis = list(title = 'Principal Component', color = 'white'),  # White text for axis labels
+    yaxis = list(title = 'Cumulative Variance Explained', color = 'white'),  # White text for axis labels
+    plot_bgcolor = 'black',  # Set plot background color to black
+    paper_bgcolor = 'black',  # Set paper background color to black
+    font = list(color = 'white'),  # Set text color to white
+    showlegend = FALSE
+  )
+
+# Add a slider for the user to select the cumulative variance threshold
+pca_plot <- pca_plot %>%
+  layout(
+    sliders = list(
+      list(
+        currentvalue = list(prefix = "Variance Explained Threshold: ", font = list(color = 'white')),
+        steps = lapply(seq(0, 1, by = 0.05), function(threshold) {
+          list(
+            label = paste0("Threshold: ", round(threshold, 2)),
+            method = "relayout",
+            args = list(
+              list(
+                yaxis = list(range = c(0, threshold)),
+                shapes = list(
+                  type = "line",
+                  x0 = 0, x1 = 1,
+                  y0 = threshold, y1 = threshold,
+                  line = list(color = "red", width = 2)
+                ),
+                annotations = list(
+                  x = 0.5,
+                  y = threshold,
+                  text = paste("PCs Required: ", which(cumulative_variance >= threshold)[1]),
+                  showarrow = TRUE,
+                  font = list(color = 'white')
+                )
+              )
+            )
+          )
+        })
+      )
+    )
+  )
+
+# Display the plot
+pca_plot
+```
+
+
 ## Clustering to visualise the variation in the dataset
 We apply DBSCAN and Heirarchical Clustering. The idea is to treat gene expression levels as features for clustering, and then explore how samples (patients) group together based on their expression profiles.
 ### DBSCAN
@@ -228,20 +318,6 @@ ggplot(golub, aes(x = PC1, y = PC2, color = cluster)) +
        y = "Principal Component 2") +
   theme_cpunk() +
   scale_shape_manual(values = c(16, 17, 18))
-
-# Display the cluster sizes
-table(golub$cluster)
-```
-```{r}
-explained_variance <- data.frame(PC = 1:length(pca_result$sdev), 
-                                 Variance = pca_result$sdev^2 / sum(pca_result$sdev^2))
-
-ggplot(explained_variance, aes(x = PC, y = Variance)) +
-  geom_bar(stat = "identity", fill = "palegreen") +
-  labs(title = "Scree Plot",
-       x = "Principal Component",
-       y = "Proportion of Variance Explained") +
-  theme_cpunk()
 ```
 
 ### Clustering Challenges in Gene Expression Data
