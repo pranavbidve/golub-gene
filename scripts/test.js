@@ -122,7 +122,7 @@ function updatePlot(data) {
         const feature = features[i];
         return dimensions[feature](feature === "Gender" || feature === "cancer" ? d[feature] : +d[feature]);
       })(features))
-    .attr("stroke", d => colorByGender ? colorScale(d.Gender) : colorBycancer ? colorScale(d.cancer) : "steelblue")
+    .attr("stroke", d => colorByGender ? colorScale(d.Gender) : colorBycancer ? colorScale(d.cancer) : "#E200F7")
     .style("stroke-width", 1.5)
     .style("fill", "none")
     .transition()

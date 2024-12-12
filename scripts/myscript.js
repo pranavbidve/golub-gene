@@ -88,7 +88,7 @@ function updatePlot(data) {
     .attr("d", d => d3.line()
       .x((_, i) => x(features[i]))
       .y((_, i) => dimensions[features[i]](+d[features[i]]))(features))
-    .attr("stroke", d => colorByGender ? colorScale(d.Gender) : colorBycancer ? colorScale(d.cancer) : "steelblue")
+    .attr("stroke", d => colorByGender ? colorScale(d.Gender) : colorBycancer ? colorScale(d.cancer) : "#E200F7")
     .style("stroke-width", 1.5)
     .style("fill", "none")
     .transition()
