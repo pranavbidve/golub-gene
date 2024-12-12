@@ -1,11 +1,9 @@
-// add your JavaScript/D3 to this file
-
-
-const margin = { top: 50, right: 30, bottom: 10, left: 50 };
+// JavaScript/D3 Code for Parallel Coordinates Plot
+const margin = { top: 50, right: 100, bottom: 10, left: 50 };
 const width = 900 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
-const excludedFeatures = ["BM.PB", "Source", "tissue.mf", "cancer"];
+const excludedFeatures = ["BM.PB", "Source", "tissue.mf"]; 
 
 const svg = d3.select("#parallel-coordinates")
   .attr("width", width + margin.left + margin.right)
@@ -18,6 +16,7 @@ let allFeatures = []; // All available features
 let dimensions = {}; // Scales for dimensions
 let colorScale;
 let colorByGender = false; // Track whether to color lines by Gender
+let colorBycancer = false; // Track whether to color lines by cancer
 
 d3.csv("https://raw.githubusercontent.com/pranavbidve/golub-gene/refs/heads/main/data/top_50.csv").then(data => {
   allFeatures = Object.keys(data[0])
@@ -35,7 +34,12 @@ d3.csv("https://raw.githubusercontent.com/pranavbidve/golub-gene/refs/heads/main
       const button = d3.select(this);
       if (feature === "Gender") {
         colorByGender = !colorByGender; // Toggle coloring by Gender
+        colorBycancer = false; // Disable coloring by cancer
         button.classed("selected", colorByGender);
+      } else if (feature === "cancer") {
+        colorBycancer = !colorBycancer; // Toggle coloring by cancer
+        colorByGender = false; // Disable coloring by Gender
+        button.classed("selected", colorBycancer);
       } else {
         if (features.includes(feature)) {
           features = features.filter(f => f !== feature); // Remove feature
@@ -48,11 +52,12 @@ d3.csv("https://raw.githubusercontent.com/pranavbidve/golub-gene/refs/heads/main
       updatePlot(data);
     });
 
-  // Set up color scale for Gender
+  // Set up color scale for Gender and cancer
   const genders = Array.from(new Set(data.map(d => d.Gender)));
+  const cancers = Array.from(new Set(data.map(d => d.cancer)));
   colorScale = d3.scaleOrdinal()
-    .domain(genders)
-    .range(["steelblue", "orange"]);
+    .domain([...genders, ...cancers]) // Include all unique categories
+    .range(["purple", "blue", "green", "orange", "red", "yellow"]); // Ensure distinct colors
 
   // Initial empty plot
   updatePlot(data);
@@ -83,9 +88,11 @@ function updatePlot(data) {
     .attr("d", d => d3.line()
       .x((_, i) => x(features[i]))
       .y((_, i) => dimensions[features[i]](+d[features[i]]))(features))
-    .attr("stroke", d => colorByGender ? colorScale(d.Gender) : "steelblue")
-    .transition() // Add animation
-    .duration(1000)
+    .attr("stroke", d => colorByGender ? colorScale(d.Gender) : colorBycancer ? colorScale(d.cancer) : "steelblue")
+    .style("stroke-width", 1.5)
+    .style("fill", "none")
+    .transition()
+    .duration(2000)
     .attrTween("stroke-dasharray", function() {
       const length = this.getTotalLength();
       return d3.interpolateString(`0,${length}`, `${length},${length}`);
@@ -102,6 +109,40 @@ function updatePlot(data) {
       .attr("font-weight", "bold")
       .attr("y", -10)
       .attr("x", 0)
-      .text(feature); // Use feature name as axis label
+      .text(feature);
   });
+
+  // Update the legend
+  const categories = colorByGender ? Array.from(new Set(data.map(d => d.Gender))) :
+                     colorBycancer ? Array.from(new Set(data.map(d => d.cancer))) : [];
+  const legend = svg.append("g")
+    .attr("transform", `translate(${width + 20}, 0)`);
+
+  const legendItems = legend.selectAll(".legend-item")
+    .data(categories);
+
+  // Remove old legend items
+  legendItems.exit().remove();
+
+  // Add new legend items
+  legendItems.enter()
+    .append("g")
+    .attr("class", "legend-item")
+    .attr("transform", (d, i) => `translate(0, ${i * 20})`)
+    .each(function(d) {
+      const g = d3.select(this);
+      g.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", 15)
+        .attr("height", 15)
+        .attr("fill", colorScale(d));
+
+      g.append("text")
+        .attr("x", 20)
+        .attr("y", 12)
+        .text(d || "Unknown") // Handle unknown values
+        .attr("fill", "black")
+        .style("font-size", "12px");
+    });
 }
