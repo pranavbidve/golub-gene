@@ -88,15 +88,10 @@ function updatePlot(data) {
     .attr("d", d => d3.line()
       .x((_, i) => x(features[i]))
       .y((_, i) => dimensions[features[i]](+d[features[i]]))(features))
-<<<<<<< HEAD
     .attr("stroke", d => colorByGender ? colorScale(d.Gender) : colorBycancer ? colorScale(d.cancer) : "steelblue")
     .style("stroke-width", 1.5)
     .style("fill", "none")
     .transition()
-=======
-    .attr("stroke", d => colorByGender ? colorScale(d.Gender) : "steelblue")
-    .transition() // Add animation
->>>>>>> 7bb688272311fc4e457550a9aced201cc742e912
     .duration(2000)
     .attrTween("stroke-dasharray", function() {
       const length = this.getTotalLength();
@@ -110,7 +105,7 @@ function updatePlot(data) {
       .attr("transform", `translate(${x(feature)},0)`)
       .call(axis)
       .append("text")
-      .attr("fill", "white")
+      .attr("fill", "black")
       .attr("font-weight", "bold")
       .attr("y", -10)
       .attr("x", 0)
@@ -126,7 +121,7 @@ function updatePlot(data) {
   const legendItems = legend.selectAll(".legend-item")
     .data(categories);
 
-  // Remove legend items
+  // Remove old legend items
   legendItems.exit().remove();
 
   // Add new legend items
