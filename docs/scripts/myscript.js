@@ -121,7 +121,7 @@ function updatePlot(data) {
   const legendItems = legend.selectAll(".legend-item")
     .data(categories);
 
-  // Remove old legend items
+  // Remove legend items
   legendItems.exit().remove();
 
   // Add new legend items
