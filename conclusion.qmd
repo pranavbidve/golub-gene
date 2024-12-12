@@ -8,4 +8,4 @@ The PCA applied was used to identify the distribution of variance across the pri
 
 We then go on to do clustering however, due to high variance in the data, it was not fruitful. Out of two clustering techniques applied, DBSCAN failed to created more than one cluster. Hierarchical Clustering when asked to create 3 clusters, did so with many mis-clustered samples.
 
-We finally created an interactive d3 plot to help scientists look at how differen genes play with each other and/or with Gender and Cancer variables.
+We finally created an interactive d3 plot to help scientists look at how different genes play with each other and/or with Gender and Cancer variables.
