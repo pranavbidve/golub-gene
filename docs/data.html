@@ -319,6 +319,9 @@ Gender
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(VIM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'VIM' was built under R version 4.4.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: colorspace</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
@@ -341,8 +344,8 @@ Attaching package: 'VIM'</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing data pattern</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">matrixplot</span>(golub_data, <span class="at">main =</span> <span class="st">"Missing Data Pattern"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing data pattern</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">matrixplot</span>(golub_data, <span class="at">main =</span> <span class="st">"Missing Data Pattern"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -350,11 +353,6 @@ Attaching package: 'VIM'</code></pre>
 <p><img src="data_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Click in a column to sort by the corresponding variable.
-To regain use of the VIM GUI and the R console, click outside the plot region.</code></pre>
 </div>
 </div>
 <p>This heatmap does not provide much information due to many columns.</p>

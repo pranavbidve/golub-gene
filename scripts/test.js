@@ -24,33 +24,47 @@ d3.csv("https://raw.githubusercontent.com/pranavbidve/golub-gene/refs/heads/main
     .filter(feature => !excludedFeatures.includes(feature)); // Exclude specified features
 
   // Add feature selection buttons
-  d3.select("#controls")
-    .selectAll("button")
-    .data(allFeatures)
-    .enter()
-    .append("button")
-    .text(d => d)
-    .on("click", function(event, feature) {
-      const button = d3.select(this);
-      if (feature === "Gender") {
-        colorByGender = !colorByGender; // Toggle coloring by Gender
-        colorBycancer = false; // Disable coloring by cancer
-        button.classed("selected", colorByGender);
-      } else if (feature === "cancer") {
-        colorBycancer = !colorBycancer; // Toggle coloring by cancer
-        colorByGender = false; // Disable coloring by Gender
-        button.classed("selected", colorBycancer);
+d3.select("#controls")
+  .selectAll("button")
+  .data(allFeatures)
+  .enter()
+  .append("button")
+  .text(d => d)
+  .on("click", function(event, feature) {
+    const button = d3.select(this);
+
+    if (feature === "Gender" || feature === "cancer") {
+      if (features.includes(feature)) {
+        // Deselect feature
+        features = features.filter(f => f !== feature);
+        if (feature === "Gender") colorByGender = false;
+        if (feature === "cancer") colorBycancer = false;
+        button.classed("selected", false);
       } else {
-        if (features.includes(feature)) {
-          features = features.filter(f => f !== feature); // Remove feature
-          button.classed("selected", false);
-        } else {
-          features.push(feature); // Add feature
-          button.classed("selected", true);
+        // Select feature
+        features.push(feature);
+        if (feature === "Gender") {
+          colorByGender = true;
+          colorBycancer = false;
+        } else if (feature === "cancer") {
+          colorBycancer = true;
+          colorByGender = false;
         }
+        button.classed("selected", true);
       }
-      updatePlot(data);
-    });
+    } else {
+      if (features.includes(feature)) {
+        features = features.filter(f => f !== feature);
+        button.classed("selected", false);
+      } else {
+        features.push(feature);
+        button.classed("selected", true);
+      }
+    }
+
+    updatePlot(data); // Update the plot
+  });
+
 
   // Set up color scale for Gender and cancer
   const genders = Array.from(new Set(data.map(d => d.Gender)));
@@ -69,30 +83,50 @@ function updatePlot(data) {
   if (features.length === 0) return; // Exit if no features are selected
 
   // Set scales for each feature
+
   features.forEach(feature => {
+  if (feature === "Gender" || feature === "cancer") {
+    const uniqueValues = Array.from(new Set(data.map(d => d[feature])).values());
+    dimensions[feature] = d3.scalePoint()
+      .domain(uniqueValues) // Use unique categories
+      .range([height, 0]);
+  } else {
     dimensions[feature] = d3.scaleLinear()
       .domain(d3.extent(data, d => +d[feature])) // Convert to number
       .range([height, 0]);
-  });
+  }
+});
 
   // Set x-scale for feature positions
   const x = d3.scalePoint()
     .domain(features)
     .range([0, width]);
+    
+  const validData = data.filter(d =>
+    features.every(feature => {
+      if (feature === "Gender" || feature === "cancer") {
+        return d[feature] !== undefined && d[feature] !== ""; // Check for valid categorical values
+      }
+      return !isNaN(+d[feature]); // Check for valid numerical values
+    })
+  );
 
   // Draw lines
   svg.selectAll(".line")
-    .data(data.filter(d => features.every(feature => !isNaN(+d[feature])))) // Filter invalid rows
+    .data(validData) // Filter invalid rows
     .join("path")
     .attr("class", "line")
     .attr("d", d => d3.line()
       .x((_, i) => x(features[i]))
-      .y((_, i) => dimensions[features[i]](+d[features[i]]))(features))
+      .y((_, i) => {
+        const feature = features[i];
+        return dimensions[feature](feature === "Gender" || feature === "cancer" ? d[feature] : +d[feature]);
+      })(features))
     .attr("stroke", d => colorByGender ? colorScale(d.Gender) : colorBycancer ? colorScale(d.cancer) : "steelblue")
     .style("stroke-width", 1.5)
     .style("fill", "none")
     .transition()
-    .duration(2000)
+    .duration(2500)
     .attrTween("stroke-dasharray", function() {
       const length = this.getTotalLength();
       return d3.interpolateString(`0,${length}`, `${length},${length}`);
@@ -100,12 +134,14 @@ function updatePlot(data) {
 
   // Draw axes
   features.forEach(feature => {
-    const axis = d3.axisLeft(dimensions[feature]);
+    const axis = feature === "Gender" || feature === "cancer"
+      ? d3.axisLeft(dimensions[feature]) // Use categorical axis
+      : d3.axisLeft(dimensions[feature]); // Default to numerical axis
     svg.append("g")
       .attr("transform", `translate(${x(feature)},0)`)
       .call(axis)
       .append("text")
-      .attr("fill", "black")
+      .attr("fill", "#32fbe2")
       .attr("font-weight", "bold")
       .attr("y", -10)
       .attr("x", 0)
@@ -142,7 +178,7 @@ function updatePlot(data) {
         .attr("x", 20)
         .attr("y", 12)
         .text(d || "Unknown") // Handle unknown values
-        .attr("fill", "black")
+        .attr("fill", "#32fbe2")
         .style("font-size", "12px");
     });
 }

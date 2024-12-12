@@ -1,7 +1,9 @@
 # Interactive graph
 The parallel coordinates plot provides an insightful visualization for scientists aiming to explore the relationships among the top 50 most significant genes, alongside gender and cancer type. Given the vast number of genes in the dataset, this approach offers a focused and intuitive way to examine how these selected genes interact and vary across samples. By representing each sample as a line traversing the axes for each feature, the plot enables researchers to observe patterns and correlations, facilitating a deeper understanding of the roles these genes may play together in the biological and clinical context.
 
-Select two or more columns to see how they play with each other. Ypu can also deselect any clumn by clicking on the corresponsing button again!
+Select two or more columns to see how they play with each other. You can also deselect any column by clicking on the corresponding button again!
+
+*Note*: The graph adds colour based on the variables 'Gender' and 'cancer'. The one added at last will dominate the colour. You can always deselect, then reselect to change the colour dominance.
 
 <style>
 
@@ -46,4 +48,4 @@ Select two or more columns to see how they play with each other. Ypu can also de
 
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="scripts/myscript.js"></script>
+<script src="scripts/test.js"></script>
