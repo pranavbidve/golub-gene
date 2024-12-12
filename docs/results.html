@@ -103,23 +103,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
-
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-
 <script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
-
 <script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
-
 <script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
-
 <link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
-
 <script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
-
 <link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
-
 <script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
-
 
 
 <link rel="stylesheet" href="custom.css">
@@ -545,9 +536,6 @@ Attaching package: 'reshape2'</code></pre>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'plotly' was built under R version 4.4.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'plotly'</code></pre>
 </div>
@@ -568,82 +556,82 @@ Attaching package: 'plotly'</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform PCA</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(numeric_data, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the proportion of variance explained by each PC</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>variance_explained <span class="ot">&lt;-</span> <span class="fu">summary</span>(pca_result)<span class="sc">$</span>importance[<span class="dv">2</span>, ]</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the cumulative variance explained</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>cumulative_variance <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(variance_explained)</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame for plotting</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>pca_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">PC =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(variance_explained),</span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variance_Explained =</span> variance_explained,</span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cumulative_Variance =</span> cumulative_variance</span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot using plotly with custom styling</span></span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>pca_plot <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(</span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  pca_df,</span>
-<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span>PC,</span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span>Cumulative_Variance,</span>
-<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">'scatter'</span>,</span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">'lines+markers'</span>,</span>
-<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">'Cumulative Variance Explained'</span>,</span>
-<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'#E200F7'</span>)  <span class="co"># Set graph color to #E200F7</span></span>
-<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
-<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Cumulative Variance Explained by Principal Components'</span>,</span>
-<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'Principal Component'</span>, <span class="at">color =</span> <span class="st">'white'</span>),  <span class="co"># White text for axis labels</span></span>
-<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'Cumulative Variance Explained'</span>, <span class="at">color =</span> <span class="st">'white'</span>),  <span class="co"># White text for axis labels</span></span>
-<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot_bgcolor =</span> <span class="st">'black'</span>,  <span class="co"># Set plot background color to black</span></span>
-<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">paper_bgcolor =</span> <span class="st">'black'</span>,  <span class="co"># Set paper background color to black</span></span>
-<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">font =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'white'</span>),  <span class="co"># Set text color to white</span></span>
-<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">showlegend =</span> <span class="cn">FALSE</span></span>
-<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a slider for the user to select the cumulative variance threshold</span></span>
-<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a>pca_plot <span class="ot">&lt;-</span> pca_plot <span class="sc">%&gt;%</span></span>
-<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
-<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">sliders =</span> <span class="fu">list</span>(</span>
-<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
-<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">currentvalue =</span> <span class="fu">list</span>(<span class="at">prefix =</span> <span class="st">"Variance Explained Threshold: "</span>, <span class="at">font =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'white'</span>)),</span>
-<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">steps =</span> <span class="fu">lapply</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.05</span>), <span class="cf">function</span>(threshold) {</span>
-<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a>          <span class="fu">list</span>(</span>
-<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a>            <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Threshold: "</span>, <span class="fu">round</span>(threshold, <span class="dv">2</span>)),</span>
-<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a>            <span class="at">method =</span> <span class="st">"relayout"</span>,</span>
-<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a>            <span class="at">args =</span> <span class="fu">list</span>(</span>
-<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a>              <span class="fu">list</span>(</span>
-<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a>                <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">0</span>, threshold)),</span>
-<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a>                <span class="at">shapes =</span> <span class="fu">list</span>(</span>
-<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a>                  <span class="at">type =</span> <span class="st">"line"</span>,</span>
-<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a>                  <span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> <span class="dv">1</span>,</span>
-<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y0 =</span> threshold, <span class="at">y1 =</span> threshold,</span>
-<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a>                  <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">width =</span> <span class="dv">2</span>)</span>
-<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a>                ),</span>
-<span id="cb28-56"><a href="#cb28-56" aria-hidden="true" tabindex="-1"></a>                <span class="at">annotations =</span> <span class="fu">list</span>(</span>
-<span id="cb28-57"><a href="#cb28-57" aria-hidden="true" tabindex="-1"></a>                  <span class="at">x =</span> <span class="fl">0.5</span>,</span>
-<span id="cb28-58"><a href="#cb28-58" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> threshold,</span>
-<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a>                  <span class="at">text =</span> <span class="fu">paste</span>(<span class="st">"PCs Required: "</span>, <span class="fu">which</span>(cumulative_variance <span class="sc">&gt;=</span> threshold)[<span class="dv">1</span>]),</span>
-<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a>                  <span class="at">showarrow =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb28-61"><a href="#cb28-61" aria-hidden="true" tabindex="-1"></a>                  <span class="at">font =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'white'</span>)</span>
-<span id="cb28-62"><a href="#cb28-62" aria-hidden="true" tabindex="-1"></a>                )</span>
-<span id="cb28-63"><a href="#cb28-63" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb28-64"><a href="#cb28-64" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb28-65"><a href="#cb28-65" aria-hidden="true" tabindex="-1"></a>          )</span>
-<span id="cb28-66"><a href="#cb28-66" aria-hidden="true" tabindex="-1"></a>        })</span>
-<span id="cb28-67"><a href="#cb28-67" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb28-68"><a href="#cb28-68" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb28-69"><a href="#cb28-69" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb28-70"><a href="#cb28-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-71"><a href="#cb28-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the plot</span></span>
-<span id="cb28-72"><a href="#cb28-72" aria-hidden="true" tabindex="-1"></a>pca_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform PCA</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(numeric_data, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the proportion of variance explained by each PC</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>variance_explained <span class="ot">&lt;-</span> <span class="fu">summary</span>(pca_result)<span class="sc">$</span>importance[<span class="dv">2</span>, ]</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the cumulative variance explained</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>cumulative_variance <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(variance_explained)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame for plotting</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>pca_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">PC =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(variance_explained),</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variance_Explained =</span> variance_explained,</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cumulative_Variance =</span> cumulative_variance</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot using plotly with custom styling</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>pca_plot <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  pca_df,</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span>PC,</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span>Cumulative_Variance,</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">'scatter'</span>,</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">'lines+markers'</span>,</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">'Cumulative Variance Explained'</span>,</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'#E200F7'</span>)  <span class="co"># Set graph color to #E200F7</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Cumulative Variance Explained by Principal Components'</span>,</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'Principal Component'</span>, <span class="at">color =</span> <span class="st">'white'</span>),  <span class="co"># White text for axis labels</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'Cumulative Variance Explained'</span>, <span class="at">color =</span> <span class="st">'white'</span>),  <span class="co"># White text for axis labels</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot_bgcolor =</span> <span class="st">'black'</span>,  <span class="co"># Set plot background color to black</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">paper_bgcolor =</span> <span class="st">'black'</span>,  <span class="co"># Set paper background color to black</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">font =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'white'</span>),  <span class="co"># Set text color to white</span></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">showlegend =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a slider for the user to select the cumulative variance threshold</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>pca_plot <span class="ot">&lt;-</span> pca_plot <span class="sc">%&gt;%</span></span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">sliders =</span> <span class="fu">list</span>(</span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(</span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">currentvalue =</span> <span class="fu">list</span>(<span class="at">prefix =</span> <span class="st">"Variance Explained Threshold: "</span>, <span class="at">font =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'white'</span>)),</span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">steps =</span> <span class="fu">lapply</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.05</span>), <span class="cf">function</span>(threshold) {</span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>          <span class="fu">list</span>(</span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>            <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Threshold: "</span>, <span class="fu">round</span>(threshold, <span class="dv">2</span>)),</span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>            <span class="at">method =</span> <span class="st">"relayout"</span>,</span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>            <span class="at">args =</span> <span class="fu">list</span>(</span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>              <span class="fu">list</span>(</span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>                <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">0</span>, threshold)),</span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>                <span class="at">shapes =</span> <span class="fu">list</span>(</span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a>                  <span class="at">type =</span> <span class="st">"line"</span>,</span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a>                  <span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> <span class="dv">1</span>,</span>
+<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y0 =</span> threshold, <span class="at">y1 =</span> threshold,</span>
+<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a>                  <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">width =</span> <span class="dv">2</span>)</span>
+<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a>                ),</span>
+<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a>                <span class="at">annotations =</span> <span class="fu">list</span>(</span>
+<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a>                  <span class="at">x =</span> <span class="fl">0.5</span>,</span>
+<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> threshold,</span>
+<span id="cb27-59"><a href="#cb27-59" aria-hidden="true" tabindex="-1"></a>                  <span class="at">text =</span> <span class="fu">paste</span>(<span class="st">"PCs Required: "</span>, <span class="fu">which</span>(cumulative_variance <span class="sc">&gt;=</span> threshold)[<span class="dv">1</span>]),</span>
+<span id="cb27-60"><a href="#cb27-60" aria-hidden="true" tabindex="-1"></a>                  <span class="at">showarrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb27-61"><a href="#cb27-61" aria-hidden="true" tabindex="-1"></a>                  <span class="at">font =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'white'</span>)</span>
+<span id="cb27-62"><a href="#cb27-62" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb27-63"><a href="#cb27-63" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb27-64"><a href="#cb27-64" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb27-65"><a href="#cb27-65" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb27-66"><a href="#cb27-66" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb27-67"><a href="#cb27-67" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb27-68"><a href="#cb27-68" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb27-69"><a href="#cb27-69" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-70"><a href="#cb27-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-71"><a href="#cb27-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the plot</span></span>
+<span id="cb27-72"><a href="#cb27-72" aria-hidden="true" tabindex="-1"></a>pca_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-8479f29691ce8e5db301" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-8479f29691ce8e5db301">{"x":{"visdat":{"f9cab52a00":["function () ","plotlyVisDat"]},"cur_data":"f9cab52a00","attrs":{"f9cab52a00":{"x":{},"y":{},"mode":"lines+markers","line":{"color":"#E200F7"},"name":"Cumulative Variance Explained","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Cumulative Variance Explained by Principal Components","xaxis":{"domain":[0,1],"automargin":true,"title":"Principal Component","color":"white"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Cumulative Variance Explained","color":"white"},"plot_bgcolor":"black","paper_bgcolor":"black","font":{"color":"white"},"showlegend":false,"sliders":[{"currentvalue":{"prefix":"Variance Explained Threshold: ","font":{"color":"white"}},"steps":[{"label":"Threshold: 0","method":"relayout","args":[{"yaxis":{"range":[0,0]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0,"y1":0,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.05","method":"relayout","args":[{"yaxis":{"range":[0,0.050000000000000003]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.050000000000000003,"y1":0.050000000000000003,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.050000000000000003,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.1","method":"relayout","args":[{"yaxis":{"range":[0,0.10000000000000001]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.10000000000000001,"y1":0.10000000000000001,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.10000000000000001,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.15","method":"relayout","args":[{"yaxis":{"range":[0,0.15000000000000002]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.15000000000000002,"y1":0.15000000000000002,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.15000000000000002,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.2","method":"relayout","args":[{"yaxis":{"range":[0,0.20000000000000001]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.20000000000000001,"y1":0.20000000000000001,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.20000000000000001,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.25","method":"relayout","args":[{"yaxis":{"range":[0,0.25]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.25,"y1":0.25,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.25,"text":"PCs Required:  2","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.3","method":"relayout","args":[{"yaxis":{"range":[0,0.30000000000000004]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.30000000000000004,"y1":0.30000000000000004,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.30000000000000004,"text":"PCs Required:  2","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.35","method":"relayout","args":[{"yaxis":{"range":[0,0.35000000000000003]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.35000000000000003,"y1":0.35000000000000003,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.35000000000000003,"text":"PCs Required:  3","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.4","method":"relayout","args":[{"yaxis":{"range":[0,0.40000000000000002]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.40000000000000002,"y1":0.40000000000000002,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.40000000000000002,"text":"PCs Required:  4","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.45","method":"relayout","args":[{"yaxis":{"range":[0,0.45000000000000001]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.45000000000000001,"y1":0.45000000000000001,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.45000000000000001,"text":"PCs Required:  5","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.5","method":"relayout","args":[{"yaxis":{"range":[0,0.5]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.5,"y1":0.5,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.5,"text":"PCs Required:  7","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.55","method":"relayout","args":[{"yaxis":{"range":[0,0.55000000000000004]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.55000000000000004,"y1":0.55000000000000004,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.55000000000000004,"text":"PCs Required:  9","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.6","method":"relayout","args":[{"yaxis":{"range":[0,0.60000000000000009]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.60000000000000009,"y1":0.60000000000000009,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.60000000000000009,"text":"PCs Required:  12","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.65","method":"relayout","args":[{"yaxis":{"range":[0,0.65000000000000002]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.65000000000000002,"y1":0.65000000000000002,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.65000000000000002,"text":"PCs Required:  16","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.7","method":"relayout","args":[{"yaxis":{"range":[0,0.70000000000000007]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.70000000000000007,"y1":0.70000000000000007,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.70000000000000007,"text":"PCs Required:  20","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.75","method":"relayout","args":[{"yaxis":{"range":[0,0.75]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.75,"y1":0.75,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.75,"text":"PCs Required:  26","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.8","method":"relayout","args":[{"yaxis":{"range":[0,0.80000000000000004]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.80000000000000004,"y1":0.80000000000000004,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.80000000000000004,"text":"PCs Required:  32","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.85","method":"relayout","args":[{"yaxis":{"range":[0,0.85000000000000009]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.85000000000000009,"y1":0.85000000000000009,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.85000000000000009,"text":"PCs Required:  40","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.9","method":"relayout","args":[{"yaxis":{"range":[0,0.90000000000000002]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.90000000000000002,"y1":0.90000000000000002,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.90000000000000002,"text":"PCs Required:  48","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.95","method":"relayout","args":[{"yaxis":{"range":[0,0.95000000000000007]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.95000000000000007,"y1":0.95000000000000007,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.95000000000000007,"text":"PCs Required:  58","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 1","method":"relayout","args":[{"yaxis":{"range":[0,1]},"shapes":{"type":"line","x0":0,"x1":1,"y0":1,"y1":1,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":1,"text":"PCs Required:  71","showarrow":true,"font":{"color":"white"}}}]}]}],"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72],"y":[0.22561,0.34212999999999999,0.39631,0.43167,0.46172000000000002,0.48973,0.51439999999999997,0.53646000000000005,0.55557000000000001,0.57367999999999997,0.58987000000000001,0.60567000000000004,0.62028000000000005,0.63441999999999998,0.64759999999999995,0.65997000000000006,0.67147000000000001,0.68276999999999999,0.69293000000000005,0.70262000000000002,0.71221999999999996,0.72158999999999995,0.73052000000000006,0.73941999999999997,0.74811000000000005,0.75638000000000005,0.76443000000000005,0.77239000000000002,0.7802,0.78776000000000002,0.79513,0.80230000000000001,0.80935999999999997,0.81630999999999998,0.82315000000000005,0.82989000000000002,0.83648999999999996,0.84296000000000004,0.84933000000000003,0.85563,0.86187000000000002,0.86801000000000006,0.87409000000000003,0.87997000000000003,0.88575000000000004,0.89139999999999997,0.89693999999999996,0.90242999999999995,0.90783999999999998,0.91312000000000004,0.91830000000000001,0.92342000000000002,0.92840999999999996,0.93325999999999998,0.93803999999999998,0.94272,0.94737000000000005,0.95191000000000003,0.95626,0.96048999999999995,0.96464000000000005,0.96869000000000005,0.97265999999999997,0.97652000000000005,0.98030000000000006,0.98387000000000002,0.98736999999999997,0.99072000000000005,0.99385000000000001,0.99695,1,1],"mode":"lines+markers","line":{"color":"#E200F7"},"name":"Cumulative Variance Explained","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-0d9a3bbf7da6352269e2" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-0d9a3bbf7da6352269e2">{"x":{"visdat":{"b11f8b34786":["function () ","plotlyVisDat"]},"cur_data":"b11f8b34786","attrs":{"b11f8b34786":{"x":{},"y":{},"mode":"lines+markers","line":{"color":"#E200F7"},"name":"Cumulative Variance Explained","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Cumulative Variance Explained by Principal Components","xaxis":{"domain":[0,1],"automargin":true,"title":"Principal Component","color":"white"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Cumulative Variance Explained","color":"white"},"plot_bgcolor":"black","paper_bgcolor":"black","font":{"color":"white"},"showlegend":false,"sliders":[{"currentvalue":{"prefix":"Variance Explained Threshold: ","font":{"color":"white"}},"steps":[{"label":"Threshold: 0","method":"relayout","args":[{"yaxis":{"range":[0,0]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0,"y1":0,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.05","method":"relayout","args":[{"yaxis":{"range":[0,0.050000000000000003]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.050000000000000003,"y1":0.050000000000000003,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.050000000000000003,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.1","method":"relayout","args":[{"yaxis":{"range":[0,0.10000000000000001]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.10000000000000001,"y1":0.10000000000000001,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.10000000000000001,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.15","method":"relayout","args":[{"yaxis":{"range":[0,0.15000000000000002]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.15000000000000002,"y1":0.15000000000000002,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.15000000000000002,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.2","method":"relayout","args":[{"yaxis":{"range":[0,0.20000000000000001]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.20000000000000001,"y1":0.20000000000000001,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.20000000000000001,"text":"PCs Required:  1","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.25","method":"relayout","args":[{"yaxis":{"range":[0,0.25]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.25,"y1":0.25,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.25,"text":"PCs Required:  2","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.3","method":"relayout","args":[{"yaxis":{"range":[0,0.30000000000000004]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.30000000000000004,"y1":0.30000000000000004,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.30000000000000004,"text":"PCs Required:  2","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.35","method":"relayout","args":[{"yaxis":{"range":[0,0.35000000000000003]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.35000000000000003,"y1":0.35000000000000003,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.35000000000000003,"text":"PCs Required:  3","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.4","method":"relayout","args":[{"yaxis":{"range":[0,0.40000000000000002]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.40000000000000002,"y1":0.40000000000000002,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.40000000000000002,"text":"PCs Required:  4","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.45","method":"relayout","args":[{"yaxis":{"range":[0,0.45000000000000001]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.45000000000000001,"y1":0.45000000000000001,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.45000000000000001,"text":"PCs Required:  5","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.5","method":"relayout","args":[{"yaxis":{"range":[0,0.5]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.5,"y1":0.5,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.5,"text":"PCs Required:  7","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.55","method":"relayout","args":[{"yaxis":{"range":[0,0.55000000000000004]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.55000000000000004,"y1":0.55000000000000004,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.55000000000000004,"text":"PCs Required:  9","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.6","method":"relayout","args":[{"yaxis":{"range":[0,0.60000000000000009]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.60000000000000009,"y1":0.60000000000000009,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.60000000000000009,"text":"PCs Required:  12","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.65","method":"relayout","args":[{"yaxis":{"range":[0,0.65000000000000002]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.65000000000000002,"y1":0.65000000000000002,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.65000000000000002,"text":"PCs Required:  16","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.7","method":"relayout","args":[{"yaxis":{"range":[0,0.70000000000000007]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.70000000000000007,"y1":0.70000000000000007,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.70000000000000007,"text":"PCs Required:  20","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.75","method":"relayout","args":[{"yaxis":{"range":[0,0.75]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.75,"y1":0.75,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.75,"text":"PCs Required:  26","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.8","method":"relayout","args":[{"yaxis":{"range":[0,0.80000000000000004]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.80000000000000004,"y1":0.80000000000000004,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.80000000000000004,"text":"PCs Required:  32","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.85","method":"relayout","args":[{"yaxis":{"range":[0,0.85000000000000009]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.85000000000000009,"y1":0.85000000000000009,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.85000000000000009,"text":"PCs Required:  40","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.9","method":"relayout","args":[{"yaxis":{"range":[0,0.90000000000000002]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.90000000000000002,"y1":0.90000000000000002,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.90000000000000002,"text":"PCs Required:  48","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 0.95","method":"relayout","args":[{"yaxis":{"range":[0,0.95000000000000007]},"shapes":{"type":"line","x0":0,"x1":1,"y0":0.95000000000000007,"y1":0.95000000000000007,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":0.95000000000000007,"text":"PCs Required:  58","showarrow":true,"font":{"color":"white"}}}]},{"label":"Threshold: 1","method":"relayout","args":[{"yaxis":{"range":[0,1]},"shapes":{"type":"line","x0":0,"x1":1,"y0":1,"y1":1,"line":{"color":"red","width":2}},"annotations":{"x":0.5,"y":1,"text":"PCs Required:  NA","showarrow":true,"font":{"color":"white"}}}]}]}],"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72],"y":[0.22561,0.34212999999999999,0.39631,0.43167,0.46172000000000002,0.48973,0.51439999999999997,0.53645999999999994,0.5555699999999999,0.57367999999999986,0.58986999999999989,0.60566999999999993,0.62027999999999994,0.63441999999999998,0.64759999999999995,0.65996999999999995,0.6714699999999999,0.68276999999999988,0.69292999999999982,0.7026199999999998,0.71221999999999985,0.72158999999999984,0.73051999999999984,0.73941999999999986,0.74810999999999983,0.75637999999999983,0.76442999999999983,0.7723899999999998,0.78019999999999978,0.78775999999999979,0.79512999999999978,0.80229999999999979,0.80935999999999975,0.81630999999999976,0.82314999999999972,0.82988999999999968,0.83648999999999973,0.84295999999999971,0.8493299999999997,0.85562999999999967,0.86186999999999969,0.86800999999999973,0.8740899999999997,0.8799699999999997,0.8857499999999997,0.89139999999999975,0.89693999999999974,0.90242999999999973,0.90783999999999976,0.91311999999999971,0.91829999999999967,0.92341999999999969,0.92840999999999974,0.93325999999999976,0.93803999999999976,0.94271999999999978,0.94736999999999982,0.95190999999999981,0.95625999999999978,0.96048999999999973,0.96463999999999972,0.96868999999999972,0.97265999999999975,0.97651999999999972,0.98029999999999973,0.98386999999999969,0.98736999999999964,0.9907199999999996,0.99384999999999957,0.99694999999999956,0.99999999999999956,0.99999999999999956],"mode":"lines+markers","line":{"color":"#E200F7"},"name":"Cumulative Variance Explained","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -653,21 +641,18 @@ Attaching package: 'plotly'</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>golub <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/golub2.csv"</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode the cancer column</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cancer <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(golub<span class="sc">$</span>cancer)</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cancer_condition_numeric <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(golub<span class="sc">$</span>cancer)</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Select only numeric columns, including the encoded cancer_condition_numeric</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>numeric_data <span class="ot">&lt;-</span> golub[, <span class="fu">sapply</span>(golub, is.numeric)]</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform DBSCAN clustering</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbscan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>golub <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/golub2.csv"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode the cancer column</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cancer <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(golub<span class="sc">$</span>cancer)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cancer_condition_numeric <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(golub<span class="sc">$</span>cancer)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Select only numeric columns, including the encoded cancer_condition_numeric</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>numeric_data <span class="ot">&lt;-</span> golub[, <span class="fu">sapply</span>(golub, is.numeric)]</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform DBSCAN clustering</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbscan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'dbscan' was built under R version 4.4.2</code></pre>
-</div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'dbscan'</code></pre>
@@ -679,11 +664,11 @@ Attaching package: 'dbscan'</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply DBSCAN clustering to the numeric data, excluding the original categorical variables</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>dbscan_result <span class="ot">&lt;-</span> <span class="fu">dbscan</span>(numeric_data, <span class="at">eps =</span> <span class="fl">0.01</span>, <span class="at">minPts =</span> <span class="dv">2</span>)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the cluster labels to the data frame</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cluster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(dbscan_result<span class="sc">$</span>cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply DBSCAN clustering to the numeric data, excluding the original categorical variables</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>dbscan_result <span class="ot">&lt;-</span> <span class="fu">dbscan</span>(numeric_data, <span class="at">eps =</span> <span class="fl">0.01</span>, <span class="at">minPts =</span> <span class="dv">2</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the cluster labels to the data frame</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cluster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(dbscan_result<span class="sc">$</span>cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="visualize-the-clustering-using-pca-for-dimensionality-reduction" class="level4" data-number="3.3.0.1">
@@ -691,18 +676,18 @@ Attaching package: 'dbscan'</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(numeric_data, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot of the first two principal components colored by cluster</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>PC1 <span class="ot">&lt;-</span> pca_result<span class="sc">$</span>x[, <span class="dv">1</span>]</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>PC2 <span class="ot">&lt;-</span> pca_result<span class="sc">$</span>x[, <span class="dv">2</span>]</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(golub, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> cluster)) <span class="sc">+</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"DBSCAN Clustering (PCA view)"</span>, </span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Principal Component 1"</span>, </span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Principal Component 2"</span>) <span class="sc">+</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_cpunk</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(numeric_data, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot of the first two principal components colored by cluster</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>PC1 <span class="ot">&lt;-</span> pca_result<span class="sc">$</span>x[, <span class="dv">1</span>]</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>PC2 <span class="ot">&lt;-</span> pca_result<span class="sc">$</span>x[, <span class="dv">2</span>]</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(golub, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> cluster)) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"DBSCAN Clustering (PCA view)"</span>, </span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Principal Component 1"</span>, </span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Principal Component 2"</span>) <span class="sc">+</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_cpunk</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -715,15 +700,15 @@ Attaching package: 'dbscan'</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>explained_variance <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">PC =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(pca_result<span class="sc">$</span>sdev), </span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">Variance =</span> pca_result<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(pca_result<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(explained_variance, <span class="fu">aes</span>(<span class="at">x =</span> PC, <span class="at">y =</span> Variance)) <span class="sc">+</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"palegreen"</span>) <span class="sc">+</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Scree Plot"</span>,</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Principal Component"</span>,</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Proportion of Variance Explained"</span>) <span class="sc">+</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_cpunk</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>explained_variance <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">PC =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(pca_result<span class="sc">$</span>sdev), </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">Variance =</span> pca_result<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(pca_result<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(explained_variance, <span class="fu">aes</span>(<span class="at">x =</span> PC, <span class="at">y =</span> Variance)) <span class="sc">+</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"palegreen"</span>) <span class="sc">+</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Scree Plot"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Principal Component"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Proportion of Variance Explained"</span>) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_cpunk</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -740,27 +725,27 @@ Attaching package: 'dbscan'</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>golub <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/golub2.csv"</span>)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode the cancer column</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cancer <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(golub<span class="sc">$</span>cancer)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cancer_condition_numeric <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(golub<span class="sc">$</span>cancer)</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Select only numeric columns, including the encoded cancer_condition_numeric</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>numeric_data <span class="ot">&lt;-</span> golub[, <span class="fu">sapply</span>(golub, is.numeric)]</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform Hierarchical Clustering</span></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale the data before performing hierarchical clustering</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>scaled_data <span class="ot">&lt;-</span> <span class="fu">scale</span>(numeric_data)</span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the distance matrix (Euclidean distance)</span></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>dist_matrix <span class="ot">&lt;-</span> <span class="fu">dist</span>(scaled_data, <span class="at">method =</span> <span class="st">"euclidean"</span>)</span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform Hierarchical Clustering using the Ward.D2 method (minimizes variance)</span></span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>hc_result <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_matrix, <span class="at">method =</span> <span class="st">"ward.D2"</span>)</span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut the dendrogram into a specified number of clusters (for example, 3 clusters)</span></span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cluster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">cutree</span>(hc_result, <span class="at">k =</span> <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>golub <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/golub2.csv"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode the cancer column</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cancer <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(golub<span class="sc">$</span>cancer)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cancer_condition_numeric <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(golub<span class="sc">$</span>cancer)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Select only numeric columns, including the encoded cancer_condition_numeric</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>numeric_data <span class="ot">&lt;-</span> golub[, <span class="fu">sapply</span>(golub, is.numeric)]</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform Hierarchical Clustering</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale the data before performing hierarchical clustering</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>scaled_data <span class="ot">&lt;-</span> <span class="fu">scale</span>(numeric_data)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the distance matrix (Euclidean distance)</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>dist_matrix <span class="ot">&lt;-</span> <span class="fu">dist</span>(scaled_data, <span class="at">method =</span> <span class="st">"euclidean"</span>)</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform Hierarchical Clustering using the Ward.D2 method (minimizes variance)</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>hc_result <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_matrix, <span class="at">method =</span> <span class="st">"ward.D2"</span>)</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut the dendrogram into a specified number of clusters (for example, 3 clusters)</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>cluster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">cutree</span>(hc_result, <span class="at">k =</span> <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="visualize-the-clustering-using-pca-for-dimensionality-reduction-1" class="level4" data-number="3.3.1.1">
@@ -768,19 +753,19 @@ Attaching package: 'dbscan'</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(scaled_data, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot of the first two principal components colored by cluster</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>PC1 <span class="ot">&lt;-</span> pca_result<span class="sc">$</span>x[, <span class="dv">1</span>]</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>PC2 <span class="ot">&lt;-</span> pca_result<span class="sc">$</span>x[, <span class="dv">2</span>]</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(golub, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> cluster)) <span class="sc">+</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">shape =</span> cancer)) <span class="sc">+</span></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Hierarchical Clustering (PCA view)"</span>, </span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Principal Component 1"</span>, </span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Principal Component 2"</span>) <span class="sc">+</span></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_cpunk</span>() <span class="sc">+</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">18</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(scaled_data, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot of the first two principal components colored by cluster</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>PC1 <span class="ot">&lt;-</span> pca_result<span class="sc">$</span>x[, <span class="dv">1</span>]</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>golub<span class="sc">$</span>PC2 <span class="ot">&lt;-</span> pca_result<span class="sc">$</span>x[, <span class="dv">2</span>]</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(golub, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> cluster)) <span class="sc">+</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">shape =</span> cancer)) <span class="sc">+</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Hierarchical Clustering (PCA view)"</span>, </span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Principal Component 1"</span>, </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Principal Component 2"</span>) <span class="sc">+</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_cpunk</span>() <span class="sc">+</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">18</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -812,19 +797,19 @@ Attaching package: 'dbscan'</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute silhouette</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>sil <span class="ot">&lt;-</span> <span class="fu">silhouette</span>(<span class="fu">cutree</span>(hc_result, <span class="at">k =</span> <span class="dv">3</span>), dist_matrix)</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"grey50"</span>, <span class="at">col.axis =</span> <span class="st">"white"</span>, <span class="at">col.lab =</span> <span class="st">"white"</span>, <span class="at">col.main =</span> <span class="st">"white"</span>)</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot silhouette with cyberpunk styling</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  sil,</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Silhouette Plot for Hierarchical Clustering"</span>,</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#E200F7"</span>, <span class="st">"#00FFFF"</span>, <span class="st">"#FF8C00"</span>), <span class="co"># Cyberpunk colors</span></span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">border =</span> <span class="st">"white"</span>,                         <span class="co"># Border color</span></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">do.col.sort =</span> <span class="cn">TRUE</span>                        <span class="co"># Ensures colors vary by cluster</span></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute silhouette</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>sil <span class="ot">&lt;-</span> <span class="fu">silhouette</span>(<span class="fu">cutree</span>(hc_result, <span class="at">k =</span> <span class="dv">3</span>), dist_matrix)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"grey50"</span>, <span class="at">col.axis =</span> <span class="st">"white"</span>, <span class="at">col.lab =</span> <span class="st">"white"</span>, <span class="at">col.main =</span> <span class="st">"white"</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot silhouette with cyberpunk styling</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  sil,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Silhouette Plot for Hierarchical Clustering"</span>,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#E200F7"</span>, <span class="st">"#00FFFF"</span>, <span class="st">"#FF8C00"</span>), <span class="co"># Cyberpunk colors</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">border =</span> <span class="st">"white"</span>,                         <span class="co"># Border color</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">do.col.sort =</span> <span class="cn">TRUE</span>                        <span class="co"># Ensures colors vary by cluster</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
